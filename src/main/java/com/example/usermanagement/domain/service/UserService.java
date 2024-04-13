@@ -2,6 +2,9 @@ package com.example.usermanagement.domain.service;
 
 import com.example.usermanagement.domain.entity.User;
 import com.example.usermanagement.domain.repo.UserRepository;
+import com.example.usermanagement.dto.user.input.UserInput;
+import com.example.usermanagement.util.common.RoleEnum;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,9 +14,10 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UserService {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final RoleService roleService;
 
     //Get all users into List
     public List<User> getAllUsers(){
@@ -25,12 +29,37 @@ public class UserService {
         log.info("Get user success");
         return userRepository.findById(id);
     }
-    //Add
-    public User createUser(User user){
+
+    /**
+     * Calculate point base on price (1 point = 1 USD)
+     *
+     * @param userInput - Input data from userInput
+     * @return - point
+     */
+    public User createUser(UserInput userInput){
+        User user = new User();
+        user.setName(userInput.getUsername());
+        user.setEmail(userInput.getEmail());
+        user.setPassword(userInput.getPassword());
+        user.setRole(roleService.getRoleByName(RoleEnum.USER.getRole()));
+
         userRepository.save(user);
         log.info("Create user successfully");
         return user;
     }
+
+    public User createAdmin(UserInput userInput){
+        User user = new User();
+        user.setName(userInput.getUsername());
+        user.setEmail(userInput.getEmail());
+        user.setPassword(userInput.getPassword());
+        user.setRole(roleService.getRoleByName(RoleEnum.ADMIN.getRole()));
+
+        userRepository.save(user);
+        log.info("Create admin successfully");
+        return user;
+    }
+
     //Update
 
     public User updateUser(String id, User user){

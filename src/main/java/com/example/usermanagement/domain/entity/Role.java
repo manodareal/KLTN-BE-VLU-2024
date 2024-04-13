@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Random;
+import java.util.UUID;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -26,11 +29,18 @@ public class Role {
     @Column
     private String desc;
     @Column
-    private boolean isAdminstrator;
+    private boolean isAdministrator;
     @Column
     private LocalDate createAt;
     @Column
     private LocalDate updateAt;
 
+    public Role(String roleName, String desc, boolean isAdministrator) {
+        Random random= new Random();
+        this.roleId = "role-" + random.nextInt(10000);
+        this.roleName = roleName;
+        this.desc = desc;
+        this.isAdministrator = isAdministrator;
+    }
 
 }

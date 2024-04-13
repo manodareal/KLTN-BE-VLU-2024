@@ -2,6 +2,7 @@ package com.example.usermanagement.web;
 
 import com.example.usermanagement.domain.entity.User;
 import com.example.usermanagement.domain.service.UserService;
+import com.example.usermanagement.dto.user.input.UserInput;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,17 +25,16 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
     @GetMapping("/{userID}")
-
     public ResponseEntity<User> getUserbyID(@PathVariable String id){
         log.info("Starting to find by user's id");
         Optional<User> user = userService.getUserbyID(id);
         return new ResponseEntity<>(user.orElse(null),HttpStatus.OK);
     }
     @PostMapping("/create")
-    public ResponseEntity<User> createUser(@RequestBody User user){
+    public ResponseEntity<User> createUser(@RequestBody UserInput user){
         log.info("Requesting to create new user");
         User newUser = userService.createUser(user);
-        return new ResponseEntity<User>(newUser, HttpStatus.OK);
+        return new ResponseEntity<>(newUser, HttpStatus.OK);
     }
 
     @PutMapping("/{userID}/update")
