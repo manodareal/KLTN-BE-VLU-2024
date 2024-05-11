@@ -11,23 +11,22 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Random;
-import java.util.UUID;
+
 
 @Getter
 @Setter
 @AllArgsConstructor
-@RequiredArgsConstructor
-@Table(name = "Role")
+@Table(name = "role")
 @Entity
 public class Role {
 
     @Id
-    @Column(nullable = false, updatable = false)
+    @Column(name = "role_id", nullable = false, updatable = false)
     private String roleId;
-    @Column(nullable = false, unique = true)
+    @Column(name = "role_name", nullable = false, unique = true)
     private String roleName;
-    @Column
-    private String desc;
+    @Column(nullable = true)
+    private String description;
     @Column
     private boolean isAdministrator;
     @Column
@@ -35,11 +34,18 @@ public class Role {
     @Column
     private LocalDate updateAt;
 
-    public Role(String roleName, String desc, boolean isAdministrator) {
+    public Role() {
+        Random random= new Random();
+        this.roleId = "role-" + random.nextInt(10000);
+        this.createAt = LocalDate.now();
+        this.updateAt = LocalDate.now();
+    }
+
+    public Role(String roleName, String description, boolean isAdministrator) {
         Random random= new Random();
         this.roleId = "role-" + random.nextInt(10000);
         this.roleName = roleName;
-        this.desc = desc;
+        this.description = description;
         this.isAdministrator = isAdministrator;
     }
 

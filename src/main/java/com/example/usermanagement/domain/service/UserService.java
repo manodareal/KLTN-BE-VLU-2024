@@ -41,7 +41,7 @@ public class UserService {
         user.setName(userInput.getUsername());
         user.setEmail(userInput.getEmail());
         user.setPassword(userInput.getPassword());
-        user.setRole(roleService.getRoleByName(RoleEnum.USER.getRole()));
+        user.setRole(roleService.getByRoleName(RoleEnum.USER.getRole()));
 
         userRepository.save(user);
         log.info("Create user successfully");
@@ -53,7 +53,7 @@ public class UserService {
         user.setName(userInput.getUsername());
         user.setEmail(userInput.getEmail());
         user.setPassword(userInput.getPassword());
-        user.setRole(roleService.getRoleByName(RoleEnum.ADMIN.getRole()));
+        user.setRole(roleService.getByRoleName(RoleEnum.ADMIN.getRole()));
 
         userRepository.save(user);
         log.info("Create admin successfully");

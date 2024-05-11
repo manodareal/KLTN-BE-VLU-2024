@@ -1,6 +1,7 @@
 package com.example.usermanagement.domain.service;
 
 import com.example.usermanagement.domain.entity.Role;
+import com.example.usermanagement.dto.user.input.RoleInput;
 import com.example.usermanagement.domain.repo.RoleRepository;
 import com.example.usermanagement.util.common.RoleEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -31,9 +32,9 @@ public class RoleService {
         return existRole;
     }
 
-    //Using optional to find needing one
-    public Role getRoleByName(String roleName){
-        Role existRole = roleRepository.findRoleByName(roleName).orElseThrow(
+//    Using optional to find needing one
+    public Role getByRoleName(String roleName){
+        Role existRole = roleRepository.findByRoleName(roleName).orElseThrow(
                 () -> new NullPointerException("Not found this role:" + roleName)
         );
         log.info("Get role success");
@@ -55,10 +56,18 @@ public class RoleService {
     }
 
     //Add
-    public Role createRole(Role role){
-        roleRepository.save(role);
+    public Role createRole(RoleInput role){
+        Role roleEntity = new Role();
+        roleEntity.setRoleName(role.getRoleName());
+        roleEntity.setDescription(role.getDescription());
+        if (roleEntity.getRoleName().equals("ROLE_ADMIN")) {
+            roleEntity.setAdministrator(true);
+        } else {
+            roleEntity.setAdministrator(false);
+        }
+        roleRepository.save(roleEntity);
         log.info("Create role successfully");
-        return role;
+        return roleEntity;
     }
 
     //Update
@@ -68,7 +77,7 @@ public class RoleService {
             log.error("Role not exist");
         } else {
             existRole.setRoleName(role.getRoleName());
-            existRole.setDesc(role.getDesc());
+            existRole.setDescription(role.getDescription());
             existRole.setAdministrator(true);
             log.info("Role's information updated");
         }

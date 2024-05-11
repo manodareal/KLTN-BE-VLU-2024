@@ -37,6 +37,13 @@ public class UserController {
         return new ResponseEntity<>(newUser, HttpStatus.OK);
     }
 
+    @PostMapping("/createAdmin")
+    public ResponseEntity<User> createAdmin(@RequestBody UserInput admin){
+        log.info("Requesting to create new admin");
+        User newAdmin = userService.createAdmin(admin);
+        return new ResponseEntity<>(newAdmin, HttpStatus.OK);
+    }
+
     @PutMapping("/{userID}/update")
     public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User user){
         log.info("Requesting to update a user");

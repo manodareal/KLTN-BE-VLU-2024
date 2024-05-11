@@ -28,7 +28,7 @@ public class User {
     @Column
     private LocalDate updateAt;
     @ManyToOne
-    @JoinColumn(name="roleId", nullable = false)
+    @JoinColumn(name = "role_id")
     private Role role;
 
     public User() {
