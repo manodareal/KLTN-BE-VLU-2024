@@ -28,7 +28,7 @@ public class CustomerController {
         List<Customer> customers = customerService.getAllCustomers();
         return new ResponseEntity<>(customers, HttpStatus.OK);
     }
-    @GetMapping("/{customerID}")
+    @GetMapping("/{customerId}")
     public ResponseEntity<Customer> getCustomerbyID(@PathVariable String customerId){
         log.info("Starting to find customer");
         Optional<Customer> customer = customerService.getCustomerbyID(customerId);
@@ -43,13 +43,13 @@ public class CustomerController {
         Customer newCustomer = customerService.createCustomer(customer);
         return new ResponseEntity<>(newCustomer, HttpStatus.OK);
     }
-    @PutMapping("/{customerID}/update")
+    @PutMapping("/{customerId}/update")
     public ResponseEntity<Customer> updateCustomer(@PathVariable String customerId, @RequestBody Customer customer){
         log.info("Requesting to update a customer");
         Customer updateCustomer = customerService.updateCustomer(customerId, customer);
         return new ResponseEntity<>(updateCustomer, HttpStatus.OK);
     }
-    @DeleteMapping("/{customerID}/delete")
+    @DeleteMapping("/{customerId}/delete")
     public ResponseEntity<Customer> deleteCustomer(@PathVariable String customerId){
         log.info("Requesting to delete a customer");
         return new ResponseEntity<>(HttpStatus.OK);

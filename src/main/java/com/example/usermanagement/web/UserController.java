@@ -25,9 +25,9 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
     @GetMapping("/{userID}")
-    public ResponseEntity<User> getUserbyID(@PathVariable String id){
+    public ResponseEntity<User> getUserbyID(@PathVariable String userID){
         log.info("Starting to find by user's id");
-        Optional<User> user = userService.getUserbyID(id);
+        Optional<User> user = userService.getUserbyID(userID);
         return new ResponseEntity<>(user.orElse(null),HttpStatus.OK);
     }
     @PostMapping("/create")
@@ -45,13 +45,13 @@ public class UserController {
     }
 
     @PutMapping("/{userID}/update")
-    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User user){
+    public ResponseEntity<User> updateUser(@PathVariable String userID, @RequestBody User user){
         log.info("Requesting to update a user");
-        User updateUser = userService.updateUser(id, user);
+        User updateUser = userService.updateUser(userID, user);
         return new ResponseEntity<>(updateUser, HttpStatus.OK);
     }
     @DeleteMapping("/{userID}/delete")
-    public ResponseEntity<User> deleteUser(@PathVariable String id){
+    public ResponseEntity<User> deleteUser(@PathVariable String userID){
         log.info("Requesting to delete a user");
         return new ResponseEntity<>(HttpStatus.OK);
     }

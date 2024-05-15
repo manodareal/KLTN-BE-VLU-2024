@@ -53,7 +53,6 @@ public class CustomerService {
             existCustomer.setBirthday(customer.getBirthday());
 
             existCustomer.setPassword(customer.getPassword());
-
             log.info("Customer's information updated");
 
         }

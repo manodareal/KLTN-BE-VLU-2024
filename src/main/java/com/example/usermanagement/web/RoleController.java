@@ -27,13 +27,12 @@ public class RoleController {
         return new ResponseEntity<>(roles, HttpStatus.OK);
     }
 
-    @GetMapping("/{roleID}")
+    @GetMapping("/{roleId}")
     public ResponseEntity<Role> getRolebyID(@PathVariable String roleId){
         log.info("Starting to find by role's id");
         Role role = roleService.getRoleByID(roleId);
         return new ResponseEntity<>(role, HttpStatus.OK);
     }
-
     @PostMapping("/create")
     public ResponseEntity<Role> createRole(@RequestBody RoleInput role) {
         log.info("Request to create new role");
@@ -41,14 +40,14 @@ public class RoleController {
         return new ResponseEntity<>(newRole, HttpStatus.OK);
     }
 
-    @PutMapping("/{roleID}/update")
+    @PutMapping("/{roleId}/update")
     public ResponseEntity<Role> updateRole(@PathVariable String roleId, @RequestBody Role role){
         log.info("Request to update role");
         Role updateRole = roleService.updateRole(roleId, role);
         return new ResponseEntity<>(updateRole, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{roleID}/delete")
+    @DeleteMapping("/{roleId}/delete")
     public ResponseEntity<Role> deleteRole(@PathVariable String roleId){
         log.info("Requesting to delete a role");
         return new ResponseEntity<>(HttpStatus.OK);
