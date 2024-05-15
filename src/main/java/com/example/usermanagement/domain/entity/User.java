@@ -17,9 +17,11 @@ public class User {
     private String id;
 
     @Column(length = 50, nullable = false)
-    private String name;
+    private String username;
     @Column(length = 50, nullable = false)
     private String password;
+    @Column(name="full_name",nullable = false)
+    private String fullName;
     @Column(length = 50, nullable = false, unique = true)
     private String email;
 

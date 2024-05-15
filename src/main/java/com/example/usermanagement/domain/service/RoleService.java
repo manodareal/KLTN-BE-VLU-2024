@@ -46,10 +46,10 @@ public class RoleService {
         List<Role> roles = new ArrayList<>();
 
         Role roleAdmin = new Role(RoleEnum.ADMIN.getRole(), "", true);
-        Role roleUser = new Role(RoleEnum.USER.getRole(), "", false);
+        Role roleStaff = new Role(RoleEnum.STAFF.getRole(), "", false);
 
         roles.add(roleAdmin);
-        roles.add(roleUser);
+        roles.add(roleStaff);
 
         roleRepository.saveAll(roles);
         log.info("Create list roles default success");

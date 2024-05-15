@@ -38,10 +38,11 @@ public class UserService {
      */
     public User createUser(UserInput userInput){
         User user = new User();
-        user.setName(userInput.getUsername());
+        user.setUsername(userInput.getUsername());
+        user.setFullName(userInput.getFullName());
         user.setEmail(userInput.getEmail());
         user.setPassword(userInput.getPassword());
-        user.setRole(roleService.getByRoleName(RoleEnum.USER.getRole()));
+        user.setRole(roleService.getByRoleName(RoleEnum.STAFF.getRole()));
 
         userRepository.save(user);
         log.info("Create user successfully");
@@ -50,7 +51,8 @@ public class UserService {
 
     public User createAdmin(UserInput userInput){
         User user = new User();
-        user.setName(userInput.getUsername());
+        user.setUsername(userInput.getUsername());
+        user.setFullName(userInput.getFullName());
         user.setEmail(userInput.getEmail());
         user.setPassword(userInput.getPassword());
         user.setRole(roleService.getByRoleName(RoleEnum.ADMIN.getRole()));
@@ -67,8 +69,9 @@ public class UserService {
         if (existUser == null) {
             log.error("User not exist");
         } else {
-            existUser.setName(user.getName());
+            existUser.setUsername(user.getUsername());
             existUser.setEmail(user.getEmail());
+            existUser.setFullName(user.getFullName());
             //temporary password change
             existUser.setPassword(user.getPassword());
             log.info("User's information updated");
