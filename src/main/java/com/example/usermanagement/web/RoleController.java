@@ -3,6 +3,7 @@ package com.example.usermanagement.web;
 import com.example.usermanagement.domain.entity.Role;
 import com.example.usermanagement.domain.service.RoleService;
 import com.example.usermanagement.dto.user.input.RoleInput;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,10 +16,10 @@ import java.util.Optional;
 @RestController
 @Slf4j
 @RequestMapping("api/v1/roles")
-
+@RequiredArgsConstructor
 public class RoleController {
-    @Autowired
-    private RoleService roleService;
+
+    private final RoleService roleService;
 
     @GetMapping("")
     public ResponseEntity<List<Role>> getAllRole(){

@@ -25,8 +25,8 @@ public class SupplierController {
     @GetMapping("/{supplierId}")
     public ResponseEntity<Supplier> getSupplierbyID(@PathVariable String supplierId){
         log.info("Starting get find Supplier");
-        Optional<Supplier> supplier = supplierService.getSupplierbyID(supplierId);
-        return new ResponseEntity<>(supplier.orElse(null),HttpStatus.OK);
+        Supplier supplier = supplierService.getSupplierbyID(supplierId);
+        return new ResponseEntity<>(supplier,HttpStatus.OK);
     }
     @PostMapping("/create")
     public ResponseEntity<Supplier> createSupplier(@RequestBody SupplierInput supplier){

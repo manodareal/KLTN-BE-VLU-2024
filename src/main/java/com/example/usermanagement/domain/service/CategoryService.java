@@ -21,9 +21,13 @@ public class CategoryService {
         log.info("Get all categories success");
         return categoryRepository.findAll();
     }
-    public Optional<Category> getCategorybyID(String categoryId){
+    public Category getCategorybyID(String categoryId){
+        Category existCategory = categoryRepository.findById(categoryId).orElseThrow(
+                () -> new NullPointerException("not found this category" + categoryId)
+        );
         log.info("Get category success");
-        return categoryRepository.findById(categoryId);
+//        return categoryRepository.findById(categoryId);
+        return existCategory;
     }
 
     public Category createCategory(CategoryInput categoryInput){
@@ -37,7 +41,7 @@ public class CategoryService {
     }
 
     public Category updateCategory(String categoryId, Category category){
-        Category existCategory = getCategorybyID(categoryId).orElse(null);
+        Category existCategory = getCategorybyID(categoryId);
         if(existCategory == null){
             log.error("Category not exist");
         } else {
