@@ -30,8 +30,8 @@ public class CategoryController {
     @GetMapping("/{categoryId}")
     public ResponseEntity<Category> getCategorybyID(@PathVariable String categoryId){
         log.info("Starting to find category by id");
-        Optional<Category> category = categoryService.getCategorybyID(categoryId);
-        return new ResponseEntity<>(category.orElse(null), HttpStatus.OK);
+        Category category = categoryService.getCategorybyID(categoryId);
+        return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
     @PostMapping("/create")

@@ -21,9 +21,13 @@ public class SupplierService {
         log.info("Get all supplier company success");
         return supplierRepository.findAll();
     }
-    public Optional<Supplier> getSupplierbyID(String supplierId){
+    public Supplier getSupplierbyID(String supplierId){
+        Supplier existSupplier = supplierRepository.findById(supplierId).orElseThrow(
+                () -> new RuntimeException("Not found this supplier:" + supplierId)
+        );
         log.info("Get category success");
-        return supplierRepository.findById(supplierId);
+        return existSupplier;
+
     }
 
     public Supplier createSupplier(SupplierInput supplierInput){
@@ -41,7 +45,7 @@ public class SupplierService {
     }
 
     public Supplier updateSupplier(String supplierId, Supplier supplier){
-        Supplier existSupplier = getSupplierbyID(supplierId).orElse(null);
+        Supplier existSupplier = getSupplierbyID(supplierId);
         if(existSupplier == null){
             log.error("Supplier not exist");
         } else {
