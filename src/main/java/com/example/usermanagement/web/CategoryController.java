@@ -3,6 +3,7 @@ package com.example.usermanagement.web;
 import com.example.usermanagement.domain.entity.Category;
 import com.example.usermanagement.domain.service.CategoryService;
 import com.example.usermanagement.dto.user.input.CategoryInput;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -16,9 +17,10 @@ import java.util.Optional;
 @RestController
 @Slf4j
 @RequestMapping("api/v1/categories")
+@RequiredArgsConstructor
 public class CategoryController {
-    @Autowired
-    private CategoryService categoryService;
+
+    private final CategoryService categoryService;
 
     @GetMapping("")
     public ResponseEntity<List<Category>> getAllCategories(){

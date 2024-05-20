@@ -4,6 +4,7 @@ package com.example.usermanagement.web;
 import com.example.usermanagement.domain.entity.Customer;
 import com.example.usermanagement.domain.service.CustomerService;
 import com.example.usermanagement.dto.user.input.CustomerInput;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,10 +17,10 @@ import java.util.Optional;
 @RestController
 @Slf4j
 @RequestMapping("api/v1/customers")
+@RequiredArgsConstructor
 public class CustomerController {
 
-    @Autowired
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
     //Only admin&stafff
     @GetMapping("")

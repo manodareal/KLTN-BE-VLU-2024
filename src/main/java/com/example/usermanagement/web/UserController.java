@@ -3,6 +3,7 @@ package com.example.usermanagement.web;
 import com.example.usermanagement.domain.entity.User;
 import com.example.usermanagement.domain.service.UserService;
 import com.example.usermanagement.dto.user.input.UserInput;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,9 +16,10 @@ import java.util.Optional;
 @RestController
 @Slf4j
 @RequestMapping("api/v1/users")
+@RequiredArgsConstructor
 public class UserController {
-    @Autowired
-    private UserService userService;
+
+    private final UserService userService;
     @GetMapping("")
     public ResponseEntity<List<User>> getAllUsers(){
         log.info("Starting get all users");

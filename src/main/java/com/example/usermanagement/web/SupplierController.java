@@ -3,6 +3,7 @@ package com.example.usermanagement.web;
 import com.example.usermanagement.domain.entity.Supplier;
 import com.example.usermanagement.domain.service.SupplierService;
 import com.example.usermanagement.dto.user.input.SupplierInput;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +15,9 @@ import java.util.Optional;
 @RestController
 @Slf4j
 @RequestMapping("/api/v1/suppliers")
+@RequiredArgsConstructor
 public class SupplierController {
-    private SupplierService supplierService;
+    private final SupplierService supplierService;
     @GetMapping("")
     public ResponseEntity<List<Supplier>> getAllSuppliers(){
         log.info("Starting get all Suppliers");
