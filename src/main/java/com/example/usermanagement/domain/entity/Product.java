@@ -45,6 +45,9 @@ public class Product {
     @Column
     private String unitSwap;
     @Column
+    private String note;
+
+    @Column
     private Integer quantitySwap;
     @Column(nullable = false)
     private Integer quantityRemaining;

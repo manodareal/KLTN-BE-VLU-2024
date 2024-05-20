@@ -22,9 +22,13 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
-    public Optional<Customer> getCustomerbyID(String customerId){
+    public Customer getCustomerbyID(String customerId){
+        Customer existCustomer = customerRepository.findById(customerId).orElseThrow(
+                () -> new RuntimeException("Not found this customer" + customerId)
+        );
         log.info("Get customer success");
-        return customerRepository.findById(customerId);
+        return existCustomer;
+//        return customerRepository.findById(customerId);
     }
 
     public Customer createCustomer(CustomerInput customerInput){
@@ -42,7 +46,7 @@ public class CustomerService {
     }
 
     public Customer updateCustomer(String customerId, Customer customer) {
-        Customer existCustomer = getCustomerbyID(customerId).orElse((null));
+        Customer existCustomer = getCustomerbyID(customerId);
         if (existCustomer == null){
             log.error("Customer not exist");
 

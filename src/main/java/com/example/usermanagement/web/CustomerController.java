@@ -31,8 +31,8 @@ public class CustomerController {
     @GetMapping("/{customerId}")
     public ResponseEntity<Customer> getCustomerbyID(@PathVariable String customerId){
         log.info("Starting to find customer");
-        Optional<Customer> customer = customerService.getCustomerbyID(customerId);
-        return new ResponseEntity<>(customer.orElse(null),HttpStatus.OK);
+        Customer customer = customerService.getCustomerbyID(customerId);
+        return new ResponseEntity<>(customer,HttpStatus.OK);
     }
 
     //customer can use function by themselves

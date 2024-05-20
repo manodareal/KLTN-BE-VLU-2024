@@ -1,16 +1,14 @@
 package com.example.usermanagement.domain.entity;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -41,6 +39,9 @@ public class Customer {
     private LocalDate createAt;
     @Column
     private LocalDate updateAt;
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Cart> carts;
 
     public Customer(){
         this.customerId = "CUS-" + UUID.randomUUID();

@@ -32,6 +32,11 @@ public class Supplier {
     private String supplierMail;
     @Column(nullable = false)
     private String bankName;
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
     @Column(nullable = false)
     private String bankNumber;
 
