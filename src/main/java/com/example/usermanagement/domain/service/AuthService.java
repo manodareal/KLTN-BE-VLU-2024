@@ -10,8 +10,10 @@ import com.example.usermanagement.dto.user.input.UserDataInput;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -42,9 +44,12 @@ public class AuthService {
         log.info(login.getPrincipal().toString());
         User user = (User) login.getPrincipal();
 
+        // Check if the user is deleted or locked
+        if (user.getLockFlag() == 1 || user.getDeleteFlag() == 1) {
+            log.error("Authenticate Failure");
+        }
 
         String token = jwtUtil.createToken(user);
-
         log.info("Create token success: {}", token);
         return token;
     }

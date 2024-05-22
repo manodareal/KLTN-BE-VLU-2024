@@ -1,5 +1,7 @@
 package com.example.usermanagement.domain.entity;
 
+import com.example.usermanagement.domain.utils.DeleteFlag;
+import com.example.usermanagement.domain.utils.LockFlag;
 import com.google.common.collect.Lists;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,6 +41,12 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    // For prepare deleting user
+    @Column(name = "lock_flag", nullable = false)
+    private int lockFlag;
+    @Column(name = "delete_flag", nullable = false)
+    private int deleteFlag;
+
     public User() {
         this.id = "TK-" + UUID.randomUUID();
         this.createAt = LocalDate.now();
@@ -61,7 +69,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return lockFlag == LockFlag.NON_LOCK.getCode();
     }
 
     @Override
@@ -71,6 +79,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return deleteFlag == DeleteFlag.NON_DELETE.getCode();
     }
 }

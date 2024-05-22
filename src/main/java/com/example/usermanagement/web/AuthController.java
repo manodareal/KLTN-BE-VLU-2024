@@ -27,6 +27,7 @@ public class AuthController {
     public String login(@RequestBody LoginInput loginInput) {
         String token = authService.authenticate(loginInput, authenticationManager, jwtUtils);
         log.info("Login successfully");
+        System.out.println("Login successfully");
         return token;
     }
 }
