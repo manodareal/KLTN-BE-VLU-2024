@@ -1,5 +1,6 @@
 package com.example.usermanagement.domain.service;
 
+import com.example.usermanagement.config.PasswordEncrypt;
 import com.example.usermanagement.domain.entity.User;
 import com.example.usermanagement.domain.repo.UserRepository;
 import com.example.usermanagement.dto.user.input.UserInput;
@@ -41,7 +42,7 @@ public class UserService {
         user.setUsername(userInput.getUsername());
         user.setFullName(userInput.getFullName());
         user.setEmail(userInput.getEmail());
-        user.setPassword(userInput.getPassword());
+        user.setPassword(PasswordEncrypt.bcryptPassword(userInput.getPassword()));
         user.setRole(roleService.getByRoleName(RoleEnum.STAFF.getRole()));
 
         userRepository.save(user);
@@ -54,7 +55,7 @@ public class UserService {
         user.setUsername(userInput.getUsername());
         user.setFullName(userInput.getFullName());
         user.setEmail(userInput.getEmail());
-        user.setPassword(userInput.getPassword());
+        user.setPassword(PasswordEncrypt.bcryptPassword(userInput.getPassword()));
         user.setRole(roleService.getByRoleName(RoleEnum.ADMIN.getRole()));
 
         userRepository.save(user);

@@ -81,24 +81,4 @@ public class Product {
         this.updateAt = LocalDate.now();
     }
 
-    // Phương thức để lấy giá theo đơn vị
-    public BigDecimal getSellPrice(String unit) {
-        if (this.unit.equals(unit)) {
-            return this.sellPrice;
-        } else if (this.unitSwap != null && this.unitSwap.equals(unit)) {
-            return this.sellPriceSwap;
-        } else {
-            throw new IllegalArgumentException("Invalid unit");
-        }
-    }
-
-    public BigDecimal getSellPriceDebt(String unit) {
-        if (this.unit.equals(unit)) {
-            return this.sellPriceDebt;
-        } else if (this.unitSwap != null && this.unitSwap.equals(unit)) {
-            return this.sellPriceDebtSwap;
-        } else {
-            throw new IllegalArgumentException("Invalid unit");
-        }
-    }
 }

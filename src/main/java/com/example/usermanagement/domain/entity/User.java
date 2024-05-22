@@ -1,9 +1,15 @@
 package com.example.usermanagement.domain.entity;
 
+import com.google.common.collect.Lists;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.UUID;
 
 @Getter
@@ -11,18 +17,18 @@ import java.util.UUID;
 @AllArgsConstructor
 @Table (name = "account")
 @Entity
-public class User {
+public class User implements UserDetails {
     @Id
     @Column(length = 50, nullable = false)
     private String id;
 
-    @Column(length = 50, nullable = false)
+    @Column(nullable = false)
     private String username;
-    @Column(length = 50, nullable = false)
+    @Column(nullable = false)
     private String password;
     @Column(nullable = false)
     private String fullName;
-    @Column(length = 50, nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column
@@ -37,5 +43,34 @@ public class User {
         this.id = "TK-" + UUID.randomUUID();
         this.createAt = LocalDate.now();
         this.updateAt = LocalDate.now();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (StringUtils.hasText(role.getRoleName())) {
+            return Lists.newArrayList(new SimpleGrantedAuthority(role.getRoleName()));
+        } else {
+            return Lists.newArrayList();
+        }
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 }
