@@ -10,9 +10,6 @@ public class UserDataInput {
 
     private String name;
 
-
-
-
     private String email;
 
 

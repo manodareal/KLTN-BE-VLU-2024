@@ -30,7 +30,7 @@ public class CartController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete")
     public ResponseEntity<Void> removeProductFromCart(@RequestParam String customerId, @RequestParam String productId) {
         cartService.removeProductFromCart(customerId, productId);
         return ResponseEntity.noContent().build();
