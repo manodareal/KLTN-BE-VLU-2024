@@ -12,7 +12,6 @@ public class CustomerInput {
     private String username;
     private String fullName;
     private String email;
-    private String password;
     private String address;
     private Date birthday;
 

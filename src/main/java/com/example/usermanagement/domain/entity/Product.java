@@ -62,11 +62,11 @@ public class Product {
     @Column
     private BigDecimal sellPriceDebtSwap;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER) // Change to EAGER
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "product_category",
             joinColumns = @JoinColumn(name = "product_id"),
@@ -80,5 +80,4 @@ public class Product {
         this.createAt = LocalDate.now();
         this.updateAt = LocalDate.now();
     }
-
 }

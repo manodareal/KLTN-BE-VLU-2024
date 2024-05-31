@@ -17,7 +17,9 @@ import java.util.Optional;
 public class SupplierService {
 
     private final SupplierRepository supplierRepository;
-
+    public List<Supplier> searchByName(String keyword) {
+        return supplierRepository.searchByName(keyword);
+    }
     public List<Supplier> getAllSuppliers(){
         log.info("Get all supplier company success");
         return supplierRepository.findAll();
@@ -57,6 +59,7 @@ public class SupplierService {
             existSupplier.setBankNumber(supplier.getBankNumber());
             existSupplier.setPhoneNumber(supplier.getPhoneNumber());
             log.info("Update Supplier successfully");
+            supplierRepository.save(existSupplier);
         }
         return existSupplier;
     }

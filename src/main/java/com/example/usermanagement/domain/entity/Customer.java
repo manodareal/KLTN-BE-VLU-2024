@@ -1,6 +1,5 @@
 package com.example.usermanagement.domain.entity;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,8 +22,6 @@ public class Customer {
 
     @Column(length = 50, nullable = false)
     private String username;
-    @Column(length = 50, nullable = false)
-    private String password;
     @Column(length = 50, nullable = false, unique = true)
     private String email;
 
@@ -40,13 +37,12 @@ public class Customer {
     @Column
     private LocalDate updateAt;
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Cart> carts;
 
-    public Customer(){
+    public Customer() {
         this.customerId = "CUS-" + UUID.randomUUID();
         this.createAt = LocalDate.now();
         this.updateAt = LocalDate.now();
     }
-
 }

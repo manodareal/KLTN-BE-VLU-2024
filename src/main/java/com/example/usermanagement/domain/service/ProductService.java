@@ -2,8 +2,9 @@ package com.example.usermanagement.domain.service;
 
 import com.example.usermanagement.domain.entity.Product;
 import com.example.usermanagement.domain.repo.ProductRepository;
-
+import com.example.usermanagement.dto.ProductDTO;
 import com.example.usermanagement.dto.user.input.ProductInput;
+import com.example.usermanagement.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,18 +21,20 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final SupplierService supplierService;
     private final CategoryService categoryService;
+    private final ProductMapper productMapper;
 
-    public List<Product> getAllProducts() {
+    public List<ProductDTO> getAllProducts() {
         log.info("Get all products success");
-        return productRepository.findAll();
+        return productRepository.findAll().stream().map(productMapper::toDTO).toList();
     }
 
-    public Product getProductByID(String productId) {
-        return productRepository.findById(productId).orElseThrow(
+    public ProductDTO getProductByID(String productId) {
+        return productRepository.findById(productId).map(productMapper::toDTO).orElseThrow(
                 () -> new NullPointerException("Not found this product: " + productId)
         );
     }
-    public Product createProduct(ProductInput productInput) {
+
+    public ProductDTO createProduct(ProductInput productInput) {
         Product newProduct = new Product();
         newProduct.setName(productInput.getName());
         newProduct.setUnit(productInput.getUnit());
@@ -62,12 +65,12 @@ public class ProductService {
         log.info("Create product success");
         productRepository.save(newProduct);
 
-        return newProduct;
+        return productMapper.toDTO(newProduct);
     }
 
-    public Product getProductById(String productId) {
+    public ProductDTO getProductById(String productId) {
         Optional<Product> productOptional = productRepository.findById(productId);
-        return productOptional.orElse(null);
+        return productOptional.map(productMapper::toDTO).orElse(null);
     }
 
     public BigDecimal getProductPriceByUnit(Product product, String unit) {
@@ -90,32 +93,35 @@ public class ProductService {
         }
     }
 
-    public Product updateQuantityRemaining(String productId, int quantity) {
-        Product product = getProductById(productId);
+    public ProductDTO updateQuantityRemaining(String productId, int quantity) {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new NullPointerException("Product not found"));
         int remaining = product.getQuantityRemaining() - quantity;
         product.setQuantityRemaining(remaining);
         product.setNote("Số lượng tồn: " + product.getQuantityRemaining() + " " + product.getUnit()
                 + "/" + product.getQuantitySwap() + " " + product.getUnitSwap());
         log.info("Updated product quantity remaining");
-        return productRepository.save(product);
+        return productMapper.toDTO(productRepository.save(product));
     }
-    public Product updateProduct(String productId, Product productInput) {
-        Product existingProduct = getProductByID(productId);
-        if (existingProduct == null) {
-            log.error("Product not exist");
-        } else {
-            existingProduct.setName(productInput.getName());
-            existingProduct.setUnit(productInput.getUnit());
-            existingProduct.setPurchasePrice(productInput.getPurchasePrice());
-            existingProduct.setSellPrice(productInput.getSellPrice());
-            existingProduct.setSellPriceDebt(productInput.getSellPriceDebt());
-            existingProduct.setQuantity(productInput.getQuantity());
-            existingProduct.setUnitSwap(productInput.getUnitSwap());
-            existingProduct.setQuantitySwap(productInput.getQuantitySwap());
-            existingProduct.setQuantityRemaining(productInput.getQuantityRemaining());
-            log.info("Product's information updated");
-            productRepository.save(existingProduct); // Lưu thông tin sản phẩm đã cập nhật vào cơ sở dữ liệu
-        }
-        return existingProduct;
+
+    public ProductDTO updateProduct(String productId, ProductInput productInput) {
+        Product existingProduct = productRepository.findById(productId).orElseThrow(() -> new NullPointerException("Product not found"));
+
+        existingProduct.setName(productInput.getName());
+        existingProduct.setUnit(productInput.getUnit());
+        existingProduct.setPurchasePrice(productInput.getPurchasePrice());
+        existingProduct.setSellPrice(productInput.getSellPrice());
+        existingProduct.setSellPriceDebt(productInput.getSellPriceDebt());
+        existingProduct.setQuantity(productInput.getQuantity());
+        existingProduct.setUnitSwap(productInput.getUnitSwap());
+        existingProduct.setQuantitySwap(productInput.getQuantitySwap());
+        existingProduct.setQuantityRemaining(productInput.getQuantityRemaining());
+
+        log.info("Product's information updated");
+        return productMapper.toDTO(productRepository.save(existingProduct));
+    }
+
+    public void deleteProduct(String productId) {
+        log.info("Delete success");
+        productRepository.deleteById(productId);
     }
 }

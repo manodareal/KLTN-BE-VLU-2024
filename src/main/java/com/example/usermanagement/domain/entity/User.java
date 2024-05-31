@@ -17,7 +17,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
-@Table (name = "account")
+@Table(name = "account")
 @Entity
 public class User implements UserDetails {
     @Id
@@ -41,7 +41,6 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    // For prepare deleting user
     @Column(name = "lock_flag", nullable = false)
     private int lockFlag;
     @Column(name = "delete_flag", nullable = false)

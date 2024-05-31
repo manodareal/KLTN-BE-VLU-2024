@@ -1,15 +1,16 @@
 package com.example.usermanagement.domain.service;
 
-
 import com.example.usermanagement.domain.entity.Customer;
 import com.example.usermanagement.domain.repo.CustomerRepository;
+import com.example.usermanagement.dto.CustomerDTO;
 import com.example.usermanagement.dto.user.input.CustomerInput;
+import com.example.usermanagement.mapper.CustomerMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -17,50 +18,47 @@ import java.util.Optional;
 public class CustomerService {
     private final CustomerRepository customerRepository;
 
-    public List<Customer> getAllCustomers(){
+    public List<CustomerDTO> getAllCustomers(){
         log.info("Get all customers success");
-        return customerRepository.findAll();
+        List<Customer> customers = customerRepository.findAll();
+        return customers.stream().map(CustomerMapper::toDTO).collect(Collectors.toList());
     }
 
-    public Customer getCustomerbyID(String customerId){
+    public CustomerDTO getCustomerById(String customerId){
         Customer existCustomer = customerRepository.findById(customerId).orElseThrow(
-                () -> new RuntimeException("Not found this customer" + customerId)
+                () -> new RuntimeException("Not found this customer " + customerId)
         );
         log.info("Get customer success");
-        return existCustomer;
-//        return customerRepository.findById(customerId);
+        return CustomerMapper.toDTO(existCustomer);
     }
 
-    public Customer createCustomer(CustomerInput customerInput){
+    public CustomerDTO createCustomer(CustomerInput customerInput){
         Customer customer = new Customer();
         customer.setUsername(customerInput.getUsername());
         customer.setEmail(customerInput.getEmail());
-        customer.setPassword(customerInput.getPassword());
         customer.setFullName(customerInput.getFullName());
         customer.setAddress(customerInput.getAddress());
         customer.setBirthday(customerInput.getBirthday());
 
         customerRepository.save(customer);
         log.info("Create customer successfully");
-        return customer;
+        return CustomerMapper.toDTO(customer);
     }
 
-    public Customer updateCustomer(String customerId, Customer customer) {
-        Customer existCustomer = getCustomerbyID(customerId);
-        if (existCustomer == null){
-            log.error("Customer not exist");
+    public CustomerDTO updateCustomer(String customerId, CustomerInput customerInput) {
+        Customer existCustomer = customerRepository.findById(customerId).orElseThrow(
+                () -> new RuntimeException("Customer not exist")
+        );
 
-        } else {
-            existCustomer.setUsername(customer.getUsername());
-            existCustomer.setEmail(customer.getEmail());
-            existCustomer.setAddress(customer.getAddress());
-            existCustomer.setBirthday(customer.getBirthday());
+        existCustomer.setUsername(customerInput.getUsername());
+        existCustomer.setFullName(customerInput.getFullName());
+        existCustomer.setEmail(customerInput.getEmail());
+        existCustomer.setAddress(customerInput.getAddress());
+        existCustomer.setBirthday(customerInput.getBirthday());
+        customerRepository.save(existCustomer);
 
-            existCustomer.setPassword(customer.getPassword());
-            log.info("Customer's information updated");
-
-        }
-        return existCustomer;
+        log.info("Customer's information updated");
+        return CustomerMapper.toDTO(existCustomer);
     }
 
     public void deleteCustomer(String customerId){

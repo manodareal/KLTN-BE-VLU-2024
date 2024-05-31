@@ -53,6 +53,7 @@ public class CategoryController {
     @DeleteMapping("/{categoryId}/delete")
     public ResponseEntity<Category> deleteCategory(@PathVariable String categoryId){
         log.info("Requesting to delete a category");
+        categoryService.deleteCategory(categoryId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

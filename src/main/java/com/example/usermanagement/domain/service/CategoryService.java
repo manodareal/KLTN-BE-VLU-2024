@@ -47,6 +47,7 @@ public class CategoryService {
             existCategory.setCategoryName(category.getCategoryName());
             existCategory.setCodeName(category.getCodeName());
             log.info("Update Category successfully");
+            categoryRepository.save(existCategory);
         }
         return existCategory;
     }

@@ -3,15 +3,17 @@ package com.example.usermanagement.domain.service;
 import com.example.usermanagement.config.PasswordEncrypt;
 import com.example.usermanagement.domain.entity.User;
 import com.example.usermanagement.domain.repo.UserRepository;
+import com.example.usermanagement.dto.UserDTO;
 import com.example.usermanagement.dto.user.input.UserInput;
+import com.example.usermanagement.mapper.UserMapper;
 import com.example.usermanagement.util.common.RoleEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -19,25 +21,26 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final RoleService roleService;
-
-    //Get all users into List
-    public List<User> getAllUsers(){
+    private final UserMapper userMapper;
+    public List<UserDTO> searchByName(String name) {
+        List<User> users = userRepository.searchByName(name);
+        return users.stream()
+                .map(userMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+    public List<UserDTO> getAllUsers(){
         log.info("Get all users success");
-        return userRepository.findAll();
-    }
-    //Using optional to find needing one
-    public Optional<User> getUserbyID(String id){
-        log.info("Get user success");
-        return userRepository.findById(id);
+        List<User> users = userRepository.findAll();
+        return users.stream().map(userMapper::toDTO).collect(Collectors.toList());
     }
 
-    /**
-     * Calculate point base on price (1 point = 1 USD)
-     *
-     * @param userInput - Input data from userInput
-     * @return - point
-     */
-    public User createUser(UserInput userInput){
+    public Optional<UserDTO> getUserByID(String id){
+        log.info("Get user success");
+        Optional<User> user = userRepository.findById(id);
+        return user.map(userMapper::toDTO);
+    }
+
+    public UserDTO createUser(UserInput userInput){
         User user = new User();
         user.setUsername(userInput.getUsername());
         user.setFullName(userInput.getFullName());
@@ -47,10 +50,10 @@ public class UserService {
 
         userRepository.save(user);
         log.info("Create user successfully");
-        return user;
+        return userMapper.toDTO(user);
     }
 
-    public User createAdmin(UserInput userInput){
+    public UserDTO createAdmin(UserInput userInput){
         User user = new User();
         user.setUsername(userInput.getUsername());
         user.setFullName(userInput.getFullName());
@@ -60,31 +63,27 @@ public class UserService {
 
         userRepository.save(user);
         log.info("Create admin successfully");
-        return user;
+        return userMapper.toDTO(user);
     }
 
-    //Update
+    public UserDTO updateUser(String id, UserInput userInput){
+        User existUser = userRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("User not exist")
+        );
 
-    public User updateUser(String id, User user){
-        User existUser = getUserbyID(id).orElse(null);
-        if (existUser == null) {
-            log.error("User not exist");
-        } else {
-            existUser.setUsername(user.getUsername());
-            existUser.setEmail(user.getEmail());
-            existUser.setFullName(user.getFullName());
-            //temporary password change
-            existUser.setPassword(user.getPassword());
-            log.info("User's information updated");
-        }
-        return existUser;
+        existUser.setUsername(userInput.getUsername());
+        existUser.setEmail(userInput.getEmail());
+        existUser.setFullName(userInput.getFullName());
+        // Temporary password change if needed
+        // existUser.setPassword(PasswordEncrypt.bcryptPassword(userInput.getPassword()));
+        userRepository.save(existUser);
+
+        log.info("User's information updated");
+        return userMapper.toDTO(existUser);
     }
 
-    //delete
     public void deleteUser(String id){
         log.info("Delete successfully");
         userRepository.deleteById(id);
     }
-
-
 }

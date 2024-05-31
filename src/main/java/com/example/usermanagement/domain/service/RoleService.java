@@ -82,6 +82,7 @@ public class RoleService {
             existRole.setDescription(role.getDescription());
             existRole.setAdministrator(true);
             log.info("Role's information updated");
+            roleRepository.save(existRole);
         }
         return existRole;
     }

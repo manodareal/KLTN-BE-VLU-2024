@@ -17,6 +17,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -31,6 +36,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("api/v1/system/**").hasRole(ADMIN)
 //                                .requestMatchers("api/v1/admin/**").hasAnyRole(STAFF, ADMIN)
@@ -42,6 +48,7 @@ public class SecurityConfig {
                                 .requestMatchers("api/v1/products/**").hasAnyRole(ADMIN, STAFF)
                                 .requestMatchers("api/v1/carts/**").hasAnyRole(ADMIN, STAFF)
                                 .requestMatchers("api/v1/users/createAdmin").hasAnyRole(ADMIN)
+                                .requestMatchers("api/v1/cart/customer/{customerId}").permitAll()
                                 .requestMatchers("api/v1/register").permitAll()
                                 .requestMatchers("api/v1/login").permitAll()
                                 .anyRequest().authenticated()
@@ -73,6 +80,19 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
 
         return new BCryptPasswordEncoder();
+    }
+
+    //setup CORS test
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Add your frontend URL
+        configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
 }

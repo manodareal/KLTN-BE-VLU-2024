@@ -18,6 +18,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SupplierController {
     private final SupplierService supplierService;
+    @GetMapping("/search")
+    public ResponseEntity<List<Supplier>> searchByName(@RequestParam String keyword) {
+        List<Supplier> supplier = supplierService.searchByName(keyword);
+        return ResponseEntity.ok(supplier);
+    }
     @GetMapping("")
     public ResponseEntity<List<Supplier>> getAllSuppliers(){
         log.info("Starting get all Suppliers");
@@ -45,6 +50,7 @@ public class SupplierController {
     @DeleteMapping("/{supplierId}/delete")
     public ResponseEntity<Supplier> deleteSupplier(@PathVariable String supplierId){
         log.info("Requesting to delete a supplier");
+        supplierService.deleteSupplier(supplierId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

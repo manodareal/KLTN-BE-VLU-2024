@@ -1,18 +1,15 @@
 package com.example.usermanagement.web;
 
-
-import com.example.usermanagement.domain.entity.Customer;
 import com.example.usermanagement.domain.service.CustomerService;
+import com.example.usermanagement.dto.CustomerDTO;
 import com.example.usermanagement.dto.user.input.CustomerInput;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -22,37 +19,40 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-    //Only admin&stafff
+    //Only admin&staff
     @GetMapping("")
-    public ResponseEntity<List<Customer>> getAllCustomers(){
+    public ResponseEntity<List<CustomerDTO>> getAllCustomers(){
         log.info("Starting get all customers");
-        List<Customer> customers = customerService.getAllCustomers();
+        List<CustomerDTO> customers = customerService.getAllCustomers();
         return new ResponseEntity<>(customers, HttpStatus.OK);
     }
+
     @GetMapping("/{customerId}")
-    public ResponseEntity<Customer> getCustomerbyID(@PathVariable String customerId){
+    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable String customerId){
         log.info("Starting to find customer");
-        Customer customer = customerService.getCustomerbyID(customerId);
-        return new ResponseEntity<>(customer,HttpStatus.OK);
+        CustomerDTO customer = customerService.getCustomerById(customerId);
+        return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
-    //customer can use function by themselves
-
+    // Customer can use function by themselves
     @PostMapping("/create")
-    public ResponseEntity<Customer> createCustomer(@RequestBody CustomerInput customer){
+    public ResponseEntity<CustomerDTO> createCustomer(@RequestBody CustomerInput customer){
         log.info("Requesting to create new customer");
-        Customer newCustomer = customerService.createCustomer(customer);
+        CustomerDTO newCustomer = customerService.createCustomer(customer);
         return new ResponseEntity<>(newCustomer, HttpStatus.OK);
     }
+
     @PutMapping("/{customerId}/update")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable String customerId, @RequestBody Customer customer){
+    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable String customerId, @RequestBody CustomerInput customer){
         log.info("Requesting to update a customer");
-        Customer updateCustomer = customerService.updateCustomer(customerId, customer);
+        CustomerDTO updateCustomer = customerService.updateCustomer(customerId, customer);
         return new ResponseEntity<>(updateCustomer, HttpStatus.OK);
     }
+
     @DeleteMapping("/{customerId}/delete")
-    public ResponseEntity<Customer> deleteCustomer(@PathVariable String customerId){
+    public ResponseEntity<Void> deleteCustomer(@PathVariable String customerId){
         log.info("Requesting to delete a customer");
+        customerService.deleteCustomer(customerId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
