@@ -14,5 +14,6 @@ public class CustomerInput {
     private String email;
     private String address;
     private Date birthday;
+    private String phoneNumber;
 
 }

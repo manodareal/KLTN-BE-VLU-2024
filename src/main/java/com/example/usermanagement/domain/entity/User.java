@@ -1,5 +1,6 @@
 package com.example.usermanagement.domain.entity;
 
+import com.example.usermanagement.config.ShortUUIDGenerator;
 import com.example.usermanagement.domain.utils.DeleteFlag;
 import com.example.usermanagement.domain.utils.LockFlag;
 import com.google.common.collect.Lists;
@@ -47,7 +48,7 @@ public class User implements UserDetails {
     private int deleteFlag;
 
     public User() {
-        this.id = "TK-" + UUID.randomUUID();
+        this.id = "TK-" + ShortUUIDGenerator.generateShortUUID();
         this.createAt = LocalDate.now();
         this.updateAt = LocalDate.now();
     }

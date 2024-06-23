@@ -34,11 +34,17 @@ public class RoleController {
         Role role = roleService.getRoleByID(roleId);
         return new ResponseEntity<>(role, HttpStatus.OK);
     }
-    @PostMapping("/create")
-    public ResponseEntity<Role> createRole(@RequestBody RoleInput role) {
-        log.info("Request to create new role");
-        Role newRole = roleService.createRole(role);
-        return new ResponseEntity<>(newRole, HttpStatus.OK);
+//    @PostMapping("/create")
+//    public ResponseEntity<Role> createRole(@RequestBody RoleInput role) {
+//        log.info("Request to create new role");
+//        Role newRole = roleService.createRole();
+//        return new ResponseEntity<>(newRole, HttpStatus.OK);
+//    }
+    @PostMapping("/createDefault")
+    public ResponseEntity<Void> createRoleDefault() {
+        log.info("Request to Create all Roles");
+        roleService.createDefaultRole();
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{roleId}/update")

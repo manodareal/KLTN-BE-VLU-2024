@@ -16,6 +16,8 @@ public class CartDTO {
     private LocalDate updatedAt;
     private List<CartItemDTO> cartItems;
     private String customerId;
-    private String customerName; // Assuming you want customer name as well
+    private String customerName;
+    private BigDecimal downPayment;
+    private BigDecimal debtAmount;
+    private List<DebtDTO> debts;
 }
-

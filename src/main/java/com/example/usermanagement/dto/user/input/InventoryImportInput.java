@@ -7,11 +7,8 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class CartItemInput {
+public class InventoryImportInput {
     private String productId;
     private Integer quantity;
-    private String unit;
-    private BigDecimal price;
-    private BigDecimal priceDebt;
-    private String customerId;
+    private BigDecimal unitPrice;
 }

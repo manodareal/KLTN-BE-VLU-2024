@@ -1,5 +1,6 @@
 package com.example.usermanagement.domain.entity;
 
+import com.example.usermanagement.config.ShortUUIDGenerator;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -26,6 +27,12 @@ public class CartItem {
 
     @Column(nullable = false)
     private BigDecimal price;
+    @Column(nullable = false)
+    private BigDecimal priceDebt;
+    @Column(nullable = false)
+    private BigDecimal totalPrice;
+    @Column(nullable = false)
+    private BigDecimal totalDebt;
 
     @Column(nullable = false)
     private String unit;
@@ -40,6 +47,6 @@ public class CartItem {
     private Product product;
 
     public CartItem() {
-        this.cartItemId = "CARTITEM-" + UUID.randomUUID();
+        this.cartItemId = "CARTITEM-" + ShortUUIDGenerator.generateShortUUID();
     }
 }

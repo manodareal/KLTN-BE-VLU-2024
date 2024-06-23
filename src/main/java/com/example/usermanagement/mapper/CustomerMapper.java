@@ -10,6 +10,7 @@ public class CustomerMapper {
                 customer.getUsername(),
                 customer.getEmail(),
                 customer.getFullName(),
+                customer.getPhoneNumber(),
                 customer.getAddress(),
                 customer.getBirthday(),
                 customer.getCreateAt(),
@@ -23,6 +24,7 @@ public class CustomerMapper {
         customer.setUsername(customerDTO.getUsername());
         customer.setEmail(customerDTO.getEmail());
         customer.setFullName(customerDTO.getFullName());
+        customer.setPhoneNumber(customerDTO.getPhoneNumber());
         customer.setAddress(customerDTO.getAddress());
         customer.setBirthday(customerDTO.getBirthday());
         customer.setCreateAt(customerDTO.getCreateAt());

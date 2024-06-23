@@ -10,4 +10,6 @@ public class UserInput {
     private String fullName;
     private String email;
     private String password;
+
+    private String role;
 }

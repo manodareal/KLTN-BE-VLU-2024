@@ -29,6 +29,7 @@ public class JwtUtils {
         claims.put("username",user.getUsername());
         claims.put("email",user.getEmail());
         claims.put("role",user.getRole().getRoleName());
+        claims.put("userId", user.getId());
 
         // build token with these claims and subject
         return buildToken(claims, user.getEmail());

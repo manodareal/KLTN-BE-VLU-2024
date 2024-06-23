@@ -40,14 +40,24 @@ public class UserService {
         return user.map(userMapper::toDTO);
     }
 
+    public Optional<UserDTO> getUserByEmail(String email){
+        log.info("Get user success");
+        Optional<User> user = userRepository.findUserByEmail(email);
+        return user.map(userMapper::toDTO);
+    }
+
     public UserDTO createUser(UserInput userInput){
         User user = new User();
         user.setUsername(userInput.getUsername());
         user.setFullName(userInput.getFullName());
         user.setEmail(userInput.getEmail());
         user.setPassword(PasswordEncrypt.bcryptPassword(userInput.getPassword()));
-        user.setRole(roleService.getByRoleName(RoleEnum.STAFF.getRole()));
-
+        if (userInput.getRole().equals("STAFF")) {
+            user.setRole(roleService.getByRoleName(RoleEnum.STAFF.getRole()));
+        } else if (userInput.getRole().equals("ADMIN"))
+        {
+            user.setRole(roleService.getByRoleName(RoleEnum.ADMIN.getRole()));
+        }
         userRepository.save(user);
         log.info("Create user successfully");
         return userMapper.toDTO(user);
@@ -74,6 +84,12 @@ public class UserService {
         existUser.setUsername(userInput.getUsername());
         existUser.setEmail(userInput.getEmail());
         existUser.setFullName(userInput.getFullName());
+        if (userInput.getRole().equals("STAFF")) {
+            existUser.setRole(roleService.getByRoleName(RoleEnum.STAFF.getRole()));
+        } else if (userInput.getRole().equals("ADMIN"))
+        {
+            existUser.setRole(roleService.getByRoleName(RoleEnum.ADMIN.getRole()));
+        }
         // Temporary password change if needed
         // existUser.setPassword(PasswordEncrypt.bcryptPassword(userInput.getPassword()));
         userRepository.save(existUser);

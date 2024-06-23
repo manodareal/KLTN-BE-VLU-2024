@@ -14,4 +14,7 @@ public class CartItemDTO {
     private String productId;
     private String productName; // Assuming you want product name as well
     private BigDecimal price;
+    private BigDecimal priceDebt;
+    private BigDecimal totalPrice;
+    private BigDecimal totalDebt;
 }

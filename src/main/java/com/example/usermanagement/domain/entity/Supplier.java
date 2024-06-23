@@ -1,6 +1,7 @@
 package com.example.usermanagement.domain.entity;
 
 
+import com.example.usermanagement.config.ShortUUIDGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -41,7 +42,7 @@ public class Supplier {
     private LocalDate updateAt;
 
     public Supplier(){
-        this.supplierId = "SUP-" + UUID.randomUUID();
+        this.supplierId = "SUP-" + ShortUUIDGenerator.generateShortUUID();
         this.createAt = LocalDate.now();
         this.updateAt = LocalDate.now();
     }

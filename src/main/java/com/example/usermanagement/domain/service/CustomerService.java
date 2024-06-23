@@ -39,7 +39,7 @@ public class CustomerService {
         customer.setFullName(customerInput.getFullName());
         customer.setAddress(customerInput.getAddress());
         customer.setBirthday(customerInput.getBirthday());
-
+        customer.setPhoneNumber(customerInput.getPhoneNumber());
         customerRepository.save(customer);
         log.info("Create customer successfully");
         return CustomerMapper.toDTO(customer);
@@ -55,6 +55,7 @@ public class CustomerService {
         existCustomer.setEmail(customerInput.getEmail());
         existCustomer.setAddress(customerInput.getAddress());
         existCustomer.setBirthday(customerInput.getBirthday());
+        existCustomer.setPhoneNumber(customerInput.getPhoneNumber());
         customerRepository.save(existCustomer);
 
         log.info("Customer's information updated");

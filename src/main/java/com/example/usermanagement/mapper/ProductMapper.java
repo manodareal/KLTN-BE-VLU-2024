@@ -26,6 +26,7 @@ public class ProductMapper {
         dto.setNote(product.getNote());
         dto.setQuantitySwap(product.getQuantitySwap());
         dto.setQuantityRemaining(product.getQuantityRemaining());
+        dto.setSoldQuantity(product.getSoldQuantity());
         dto.setSellPriceSwap(product.getSellPriceSwap());
         dto.setSellPriceDebtSwap(product.getSellPriceDebtSwap());
         dto.setSupplierId(product.getSupplier().getSupplierId());

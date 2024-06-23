@@ -23,6 +23,7 @@ public class ProductDTO {
     private String note;
     private Integer quantitySwap;
     private Integer quantityRemaining;
+    private Integer soldQuantity;
     private BigDecimal sellPriceSwap;
     private BigDecimal sellPriceDebtSwap;
     private String supplierId;

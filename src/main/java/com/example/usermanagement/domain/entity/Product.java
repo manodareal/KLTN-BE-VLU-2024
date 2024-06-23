@@ -1,5 +1,6 @@
 package com.example.usermanagement.domain.entity;
 
+import com.example.usermanagement.config.ShortUUIDGenerator;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -62,6 +63,9 @@ public class Product {
     @Column
     private BigDecimal sellPriceDebtSwap;
 
+    @Column
+    private Integer soldQuantity;
+
     @ManyToOne(fetch = FetchType.EAGER) // Change to EAGER
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
@@ -76,7 +80,7 @@ public class Product {
 
     public Product() {
         this.categories = new ArrayList<>();
-        this.productId = "MSP-" + UUID.randomUUID();
+        this.productId = "MSP-" + ShortUUIDGenerator.generateShortUUID();
         this.createAt = LocalDate.now();
         this.updateAt = LocalDate.now();
     }

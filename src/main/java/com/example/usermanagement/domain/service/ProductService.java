@@ -1,6 +1,7 @@
 package com.example.usermanagement.domain.service;
 
 import com.example.usermanagement.domain.entity.Product;
+import com.example.usermanagement.domain.entity.Supplier;
 import com.example.usermanagement.domain.repo.ProductRepository;
 import com.example.usermanagement.dto.ProductDTO;
 import com.example.usermanagement.dto.user.input.ProductInput;
@@ -22,16 +23,29 @@ public class ProductService {
     private final SupplierService supplierService;
     private final CategoryService categoryService;
     private final ProductMapper productMapper;
+    private final SoldQuantityService soldQuantityService;
 
     public List<ProductDTO> getAllProducts() {
         log.info("Get all products success");
-        return productRepository.findAll().stream().map(productMapper::toDTO).toList();
+        List<Product> products = productRepository.findAll();
+        products.forEach(soldQuantityService::updateSoldQuantity);
+        return products.stream().map(productMapper::toDTO).toList();
     }
 
     public ProductDTO getProductByID(String productId) {
-        return productRepository.findById(productId).map(productMapper::toDTO).orElseThrow(
+        Product product = productRepository.findById(productId).orElseThrow(
                 () -> new NullPointerException("Not found this product: " + productId)
         );
+        soldQuantityService.updateSoldQuantity(product);
+        return productMapper.toDTO(product);
+    }
+    public List<ProductDTO> getProductBySupplierID(String supplierId) {
+        Supplier supplier = supplierService.getSupplierbyID(supplierId);
+        if (Objects.isNull(supplier)) {
+            throw new NullPointerException("Supplier not found with id: " + supplierId);
+        }
+        List<Product> products = productRepository.findBySupplier(supplier);
+        return products.stream().map(productMapper::toDTO).toList();
     }
 
     public ProductDTO createProduct(ProductInput productInput) {
@@ -65,12 +79,17 @@ public class ProductService {
         log.info("Create product success");
         productRepository.save(newProduct);
 
+        soldQuantityService.updateSoldQuantity(newProduct);
+
         return productMapper.toDTO(newProduct);
     }
 
     public ProductDTO getProductById(String productId) {
-        Optional<Product> productOptional = productRepository.findById(productId);
-        return productOptional.map(productMapper::toDTO).orElse(null);
+        Product product = productRepository.findById(productId).orElse(null);
+        if (product != null) {
+            soldQuantityService.updateSoldQuantity(product);
+        }
+        return productMapper.toDTO(product);
     }
 
     public BigDecimal getProductPriceByUnit(Product product, String unit) {
@@ -100,6 +119,7 @@ public class ProductService {
         product.setNote("Số lượng tồn: " + product.getQuantityRemaining() + " " + product.getUnit()
                 + "/" + product.getQuantitySwap() + " " + product.getUnitSwap());
         log.info("Updated product quantity remaining");
+        soldQuantityService.updateSoldQuantity(product);
         return productMapper.toDTO(productRepository.save(product));
     }
 
@@ -117,6 +137,7 @@ public class ProductService {
         existingProduct.setQuantityRemaining(productInput.getQuantityRemaining());
 
         log.info("Product's information updated");
+        soldQuantityService.updateSoldQuantity(existingProduct);
         return productMapper.toDTO(productRepository.save(existingProduct));
     }
 

@@ -1,11 +1,13 @@
 package com.example.usermanagement.domain.entity;
 
+import com.example.usermanagement.config.ShortUUIDGenerator;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,19 +28,31 @@ public class Cart {
 
     @Column
     private LocalDate createdAt;
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Debt> debts;
 
     @Column
     private LocalDate updatedAt;
+
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> cartItems = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", updatable = false)
     private Customer customer;
+
+    @Column
+    private BigDecimal downPayment;
+
+    @Column
+    private BigDecimal debtAmount;
+
     public Cart() {
-        this.cartId = "CART-" + UUID.randomUUID();
+        this.cartId = "CART-" + ShortUUIDGenerator.generateShortUUID();
         this.createdAt = LocalDate.now();
         this.updatedAt = LocalDate.now();
         this.status = "Pending";
+        this.downPayment = BigDecimal.ZERO;
+        this.debtAmount = BigDecimal.ZERO;
     }
 }
